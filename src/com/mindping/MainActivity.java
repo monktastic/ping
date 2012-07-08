@@ -20,26 +20,21 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		final AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		final Intent intent = new Intent(MainActivity.this, PingReceiver.class);
+		final PendingIntent sender = PendingIntent
+				.getBroadcast(MainActivity.this, 0, intent,
+						PendingIntent.FLAG_UPDATE_CURRENT);
+
 		final ToggleButton pingButton = (ToggleButton) findViewById(R.id.ping_toggleButton);
 		pingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this,
-						PingReceiver.class);
-				PendingIntent sender = PendingIntent.getBroadcast(
-						MainActivity.this, 0, intent,
-						PendingIntent.FLAG_UPDATE_CURRENT);
-				// Get the AlarmManager service
-				AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-				
 				if (!pingButton.isChecked()) {
 					// disable future events
 					am.cancel(sender);
 				} else {
-					// get a Calendar object with current time
 					Calendar cal = Calendar.getInstance();
-					// add 5 seconds to the calendar object
-					cal.add(Calendar.SECOND, 5);
-
+					cal.add(Calendar.SECOND, 3);
 					am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
 							sender);
 				}
