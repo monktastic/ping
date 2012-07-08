@@ -25,6 +25,9 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// set default values in preferences
+		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
 		final AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		final Intent intent = new Intent(this, PingReceiver.class);
