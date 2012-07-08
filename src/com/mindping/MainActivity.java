@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,9 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// set default values in preferences
+		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
 		final AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		final Intent intent = new Intent(this, PingReceiver.class);
