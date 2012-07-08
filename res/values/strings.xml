@@ -4,8 +4,8 @@
     <string name="hello_world">Hello stupid!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="enable_ping">Enable pinging</string>
-    <string name="disable_ping">Disable pinging</string>
+    <string name="ping_enabled">Ping enabled</string>
+    <string name="ping_disabled">Ping disabled</string>
     <string name="radar_img_cd">Radar</string>
 
 </resources>

@@ -3,7 +3,6 @@ package com.mindping;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.widget.Toast;
 
@@ -12,9 +11,7 @@ public class PingReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		try {
-			Bundle bundle = intent.getExtras();
-			String message = bundle.getString("alarm_message");
-			Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Are you aware?", Toast.LENGTH_SHORT).show();
 			Vibrator vibrator = (Vibrator) context
 					.getSystemService(Context.VIBRATOR_SERVICE);
 			
