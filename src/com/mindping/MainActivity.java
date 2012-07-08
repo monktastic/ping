@@ -22,10 +22,9 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		final AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		final Intent intent = new Intent(MainActivity.this, PingReceiver.class);
-		final PendingIntent sender = PendingIntent
-				.getBroadcast(MainActivity.this, 0, intent,
-						PendingIntent.FLAG_UPDATE_CURRENT);
+		final Intent intent = new Intent(this, PingReceiver.class);
+		final PendingIntent sender = PendingIntent.getBroadcast(this, 0,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		final ToggleButton pingButton = (ToggleButton) findViewById(R.id.ping_toggleButton);
 		pingButton.setOnClickListener(new OnClickListener() {

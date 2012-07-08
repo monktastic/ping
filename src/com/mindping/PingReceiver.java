@@ -11,13 +11,7 @@ import android.os.Vibrator;
 import android.widget.Toast;
 
 public class PingReceiver extends BroadcastReceiver {
-	static int number;
-
-	public PingReceiver() {
-		number++;
-	}
-
-	long[] pulse = { 0, 200, //
+	final static long[] pulse = { 0, 200, //
 			200, 200, //
 			100, 100, //
 			100, 200, //
@@ -27,8 +21,8 @@ public class PingReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		try {
-			Toast.makeText(context, "Are you aware? " + number,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Are you aware?", Toast.LENGTH_SHORT)
+					.show();
 			Vibrator vibrator = (Vibrator) context
 					.getSystemService(Context.VIBRATOR_SERVICE);
 
