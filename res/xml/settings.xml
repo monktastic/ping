@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <com.hlidskialf.android.preference.SeekBarPreference
+        android:defaultValue="10"
+        android:key="ping_interval"
+        min="1"
+        android:max="120"
+        android:summary="Minutes between pings"
+        android:text=" minutes"
+        android:title="Ping interval" />
+    <com.hlidskialf.android.preference.SeekBarPreference
+        android:defaultValue="7"
+        android:key="aware_checks"
+        android:max="100"
+        android:summary="Percentage aware reports"
+        android:text=" percent"
+        android:title="Aware reports" />
+
+</PreferenceScreen>
