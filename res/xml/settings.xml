@@ -2,21 +2,30 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <com.hlidskialf.android.preference.SeekBarPreference
+        min="1"
         android:defaultValue="10"
         android:key="ping_interval"
-        min="1"
         android:max="120"
-        android:summary="Minutes between pings"
+        android:summary="@string/settings_summary_ping_interval"
         android:text=" minutes"
-        android:title="Ping interval" />
+        android:title="@string/settings_title_ping_interval" />
     <com.hlidskialf.android.preference.SeekBarPreference
         android:defaultValue="7"
         android:key="aware_checks"
         android:max="100"
-        android:summary="Percentage aware reports"
+        android:summary="@string/settings_summary_aware_reports"
         android:text=" percent"
-        android:title="Aware reports" />
-    <CheckBoxPreference android:summaryOff="Sound off" android:summaryOn="Sound on" android:key="is_sound_enabled" android:defaultValue="true"/>
-    <CheckBoxPreference android:summaryOff="Vibration disabled" android:summaryOn="Vibration enabled" android:key="is_vibration_enabled" android:defaultValue="true"/>
+        android:title="@string/settings_title_aware_reports" />
+
+    <CheckBoxPreference
+        android:key="is_sound_enabled"
+        android:summaryOff="@string/settings_summary_off_sound_enabled"
+        android:summaryOn="@string/settings_summary_on_sound_enabled"
+        android:title="@string/settings_title_sound_enabled" />
+    <CheckBoxPreference
+        android:key="is_vibration_enabled"
+        android:summaryOff="@string/settings_summary_off_vibration_enabled"
+        android:summaryOn="@string/settings_summary_on_vibration_enabled"
+        android:title="@string/settings_title_vibration_enabled" />
 
 </PreferenceScreen>

@@ -7,9 +7,22 @@
     <string name="ping_enabled">Ping enabled</string>
     <string name="ping_disabled">Ping disabled</string>
     <string name="radar_img_cd">Radar</string>
-    <string name="settings_ping_interval">Ping interval</string>
     <string name="settings_aware_response">Aware response</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_stats">Stats</string>
 
+    <!-- Settings -->
+    <string name="settings_title_ping_interval">Ping interval</string>
+    <string name="settings_summary_ping_interval">%d minutes between pings</string>
+
+    <string name="settings_title_aware_reports">Aware response</string>
+    <string name="settings_summary_aware_reports">%d percent of pings require response</string>
+
+    <string name="settings_title_sound_enabled">Ping sound</string>
+    <string name="settings_summary_on_sound_enabled">Sound enabled</string>
+    <string name="settings_summary_off_sound_enabled">Sound disabled</string>
+    
+    <string name="settings_title_vibration_enabled">Ping vibration</string>
+    <string name="settings_summary_on_vibration_enabled">Vibration enabled</string>
+    <string name="settings_summary_off_vibration_enabled">Vibration disabled</string>
+    
 </resources>

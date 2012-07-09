@@ -6,6 +6,7 @@
 package com.hlidskialf.android.preference;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -79,6 +80,16 @@ public class SeekBarPreference extends DialogPreference implements
 	}
 
 	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		super.onClick(dialog, which);
+
+		if (which == DialogInterface.BUTTON_POSITIVE) {
+			int value = mSeekBar.getProgress();
+			persistInt(value + mMin);
+		}
+	}
+
+	@Override
 	protected void onSetInitialValue(boolean restore, Object defaultValue) {
 		super.onSetInitialValue(restore, defaultValue);
 		if (restore)
@@ -87,17 +98,10 @@ public class SeekBarPreference extends DialogPreference implements
 			mValue = (Integer) defaultValue;
 	}
 
-	@Override
-	protected boolean persistInt(int value) {
-		return super.persistInt(value);
-	}
-
 	public void onProgressChanged(SeekBar seek, int value, boolean fromTouch) {
 		value += mMin;
 		String t = String.valueOf(value);
 		mValueText.setText(mSuffix == null ? t : t.concat(mSuffix));
-		if (shouldPersist())
-			persistInt(value);
 		callChangeListener(Integer.valueOf(value));
 	}
 

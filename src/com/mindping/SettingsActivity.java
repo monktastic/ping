@@ -1,26 +1,51 @@
 package com.mindping;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
-public class SettingsActivity extends PreferenceActivity {
+@SuppressWarnings("deprecation")
+public class SettingsActivity extends PreferenceActivity implements
+		OnSharedPreferenceChangeListener {
 
-	@SuppressWarnings("deprecation")
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		Preference preference = findPreference(key);
+		if (key.equals("ping_interval")) {
+			int value = sharedPreferences.getInt(key, 0);
+			String summary = this.getString(
+					R.string.settings_summary_ping_interval, value);
+			preference.setSummary(summary);
+		} else if (key.equals("aware_checks")) {
+			int value = sharedPreferences.getInt(key, 0);
+			String summary = this.getString(
+					R.string.settings_summary_aware_reports, value);
+			preference.setSummary(summary);
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		PreferenceManager prefMgr = getPreferenceManager();
-		prefMgr.setSharedPreferencesName(MainActivity.SHARED_PREFS_NAME);
-		prefMgr.setSharedPreferencesMode(MODE_MULTI_PROCESS);
-		
-		addPreferencesFromResource(R.xml.settings);
-
 		if (android.os.Build.VERSION.SDK_INT >= 11) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
+		
+		PreferenceManager prefMgr = getPreferenceManager();
+		prefMgr.setSharedPreferencesName(MainActivity.SHARED_PREFS_NAME);
+		prefMgr.setSharedPreferencesMode(MODE_MULTI_PROCESS);
+		SharedPreferences prefs = prefMgr.getSharedPreferences();
+		prefs.registerOnSharedPreferenceChangeListener(this);
+		
+		addPreferencesFromResource(R.xml.settings);
+		
+		onSharedPreferenceChanged(prefs, "ping_interval");
+		onSharedPreferenceChanged(prefs, "aware_checks");
 	}
 
 	@Override
@@ -34,4 +59,5 @@ public class SettingsActivity extends PreferenceActivity {
 
 		return super.onOptionsItemSelected(item);
 	}
+
 }
