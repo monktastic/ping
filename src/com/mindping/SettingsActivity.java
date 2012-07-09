@@ -2,6 +2,7 @@ package com.mindping;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 public class SettingsActivity extends PreferenceActivity {
@@ -11,6 +12,10 @@ public class SettingsActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		PreferenceManager prefMgr = getPreferenceManager();
+		prefMgr.setSharedPreferencesName(MainActivity.SHARED_PREFS_NAME);
+		prefMgr.setSharedPreferencesMode(MODE_MULTI_PROCESS);
+		
 		addPreferencesFromResource(R.xml.settings);
 
 		if (android.os.Build.VERSION.SDK_INT >= 11) {
