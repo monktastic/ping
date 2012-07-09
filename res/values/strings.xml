@@ -2,6 +2,7 @@
 
     <string name="app_name">MindPing</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_about">About MindPing</string>
     <string name="title_activity_main">MindPing</string>
     <string name="ping_enabled">Ping enabled</string>
     <string name="ping_disabled">Ping disabled</string>

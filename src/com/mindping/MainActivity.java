@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -25,7 +26,7 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// set default values in preferences
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
@@ -52,7 +53,6 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
-
 	}
 
 	@Override
@@ -102,9 +102,19 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent = new Intent(this, SettingsActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		startActivity(intent);
+		switch (item.getItemId()) {
+		case R.id.menu_settings:
+			Intent intent = new Intent(this, SettingsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+			startActivity(intent);
+			break;
+		case R.id.menu_about:
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+					Uri.parse("https://sites.google.com/site/mindpingapp/"));
+			startActivity(browserIntent);
+			break;
+		}
+
 		return true;
 	}
 }
