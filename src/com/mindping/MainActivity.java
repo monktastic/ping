@@ -19,8 +19,9 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
-
 	private PendingIntent sender;
+
+	static String SHARED_PREFS_NAME = "main_activity_prefs";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,26 +29,35 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		// set default values in preferences
-		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+		PreferenceManager.setDefaultValues(this.getApplicationContext(),
+				R.xml.settings, false);
 
 		final AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		final Intent intent = new Intent(this, PingReceiver.class);
 		sender = PendingIntent.getBroadcast(this, 0, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
-		final SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(MainActivity.this);
 
 		final ToggleButton pingButton = (ToggleButton) findViewById(R.id.ping_toggleButton);
 
 		pingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				SharedPreferences preferences = MainActivity.this
+						.getSharedPreferences(SHARED_PREFS_NAME,
+								MODE_MULTI_PROCESS);
+
+				final int minutes = preferences.getInt("ping_interval", 0);
+				Toast.makeText(MainActivity.this, "Duration " + minutes,
+						Toast.LENGTH_SHORT).show();
+
 				if (!pingButton.isChecked()) {
 					// disable future events
 					am.cancel(sender);
 				} else {
-					int minutes = preferences.getInt("ping_interval", 0);
 					Calendar cal = Calendar.getInstance();
-					// cal.add(Calendar.SECOND, minutes);
+					if (!BuildConfig.DEBUG) {
+						// In debug mode, ping now
+						cal.add(Calendar.MINUTE, minutes);
+					}
 					am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
 							sender);
 				}
@@ -60,16 +70,16 @@ public class MainActivity extends Activity {
 		super.onSaveInstanceState(savedInstanceState);
 		final ToggleButton pingButton = (ToggleButton) findViewById(R.id.ping_toggleButton);
 		savedInstanceState.putBoolean("is_pinging", pingButton.isChecked());
-		Toast.makeText(this, "Saving " + pingButton.isChecked(),
-				Toast.LENGTH_SHORT).show();
+		if (BuildConfig.DEBUG) {
+			Toast.makeText(this, "Saving " + pingButton.isChecked(),
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		boolean checked = savedInstanceState.getBoolean("is_pinging");
-		Toast.makeText(this, "2) Value is " + checked, Toast.LENGTH_SHORT)
-				.show();
 		final ToggleButton pingButton = (ToggleButton) findViewById(R.id.ping_toggleButton);
 		pingButton.setChecked(checked);
 	}
@@ -87,7 +97,10 @@ public class MainActivity extends Activity {
 	}
 
 	private void stop() {
-		Toast.makeText(this, "All pings stopped!", Toast.LENGTH_SHORT).show();
+		if (BuildConfig.DEBUG) {
+			Toast.makeText(this, "All pings stopped!", Toast.LENGTH_SHORT)
+					.show();
+		}
 		final AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		if (sender != null) {
 			am.cancel(sender);

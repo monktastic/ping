@@ -16,7 +16,7 @@
         android:summary="Percentage aware reports"
         android:text=" percent"
         android:title="Aware reports" />
-    <CheckBoxPreference android:summaryOff="Sound off" android:summaryOn="Sound on" android:key="is_sound_enabled"/>
-    <CheckBoxPreference android:summaryOff="Vibration disabled" android:summaryOn="Vibration enabled" android:key="is_vibration_enabled"/>
+    <CheckBoxPreference android:summaryOff="Sound off" android:summaryOn="Sound on" android:key="is_sound_enabled" android:defaultValue="true"/>
+    <CheckBoxPreference android:summaryOff="Vibration disabled" android:summaryOn="Vibration enabled" android:key="is_vibration_enabled" android:defaultValue="true"/>
 
 </PreferenceScreen>

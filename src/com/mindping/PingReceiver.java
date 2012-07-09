@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class PingReceiver extends BroadcastReceiver {
@@ -28,31 +27,46 @@ public class PingReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		try {
-			AssetFileDescriptor afd = context.getAssets().openFd(
-					"simple_ping.wav");
-			MediaPlayer player = new MediaPlayer();
-			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
-					afd.getLength());
-			player.prepare();
-			player.start();
+			SharedPreferences preferences = context.getSharedPreferences(
+					MainActivity.SHARED_PREFS_NAME, Context.MODE_MULTI_PROCESS);
 
-			Toast.makeText(context, "Are you aware?", Toast.LENGTH_SHORT)
+			boolean soundEnabled = preferences.getBoolean("is_sound_enabled",
+					false);
+			if (soundEnabled) {
+				AssetFileDescriptor afd = context.getAssets().openFd(
+						"simple_ping.wav");
+				MediaPlayer player = new MediaPlayer();
+				player.setDataSource(afd.getFileDescriptor(),
+						afd.getStartOffset(), afd.getLength());
+				player.prepare();
+				player.start();
+			}
+
+			boolean vibrationEnabled = preferences.getBoolean(
+					"is_vibration_enabled", false);
+			if (vibrationEnabled) {
+				Vibrator vibrator = (Vibrator) context
+						.getSystemService(Context.VIBRATOR_SERVICE);
+				vibrator.vibrate(PING_PULSE, -1);
+			}
+
+			Toast.makeText(context, "Are you aware? ", Toast.LENGTH_SHORT)
 					.show();
-			Vibrator vibrator = (Vibrator) context
-					.getSystemService(Context.VIBRATOR_SERVICE);
 
-			vibrator.vibrate(PING_PULSE, -1);
-
-			SharedPreferences preferences = PreferenceManager
-					.getDefaultSharedPreferences(context);
-			int minutes = preferences.getInt("ping_interval", 0);
-
+			// Kick off the next ping
+			int minutes = preferences.getInt("ping_interval", 10);
 			PendingIntent sender = PendingIntent.getBroadcast(context, 0,
 					intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			AlarmManager am = (AlarmManager) context
 					.getSystemService(Context.ALARM_SERVICE);
 			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.SECOND, minutes);
+
+			if (BuildConfig.DEBUG) {
+				// Convert to seconds if in debug mode
+				cal.add(Calendar.SECOND, minutes);
+			} else {
+				cal.add(Calendar.MINUTE, minutes);
+			}
 			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
 		} catch (Exception e) {
 			Toast.makeText(context, "ERRAR!: " + e, Toast.LENGTH_SHORT).show();
