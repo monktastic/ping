@@ -16,5 +16,6 @@
         android:summary="Percentage aware reports"
         android:text=" percent"
         android:title="Aware reports" />
+    <CheckBoxPreference android:summaryOff="Sound off" android:summaryOn="Sound on" android:key="is_sound_enabled"/>
 
 </PreferenceScreen>
