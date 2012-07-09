@@ -9,5 +9,7 @@
     <string name="radar_img_cd">Radar</string>
     <string name="settings_ping_interval">Ping interval</string>
     <string name="settings_aware_response">Aware response</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_stats">Stats</string>
 
 </resources>

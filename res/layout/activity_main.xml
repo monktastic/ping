@@ -24,4 +24,10 @@
         android:textOff="@string/ping_disabled"
         android:textOn="@string/ping_enabled" />
 
+    <Button
+        android:id="@+id/stats_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Statistics" />
+
 </LinearLayout>

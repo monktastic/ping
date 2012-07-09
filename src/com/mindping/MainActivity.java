@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -61,6 +62,16 @@ public class MainActivity extends Activity {
 					am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
 							sender);
 				}
+			}
+		});
+
+		final Button statsButton = (Button) findViewById(R.id.stats_button);
+		statsButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this,
+						StatsActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+				MainActivity.this.startActivity(intent);
 			}
 		});
 	}

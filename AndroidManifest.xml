@@ -28,6 +28,14 @@
             android:name="PingReceiver"
             android:process=":remote" >
         </receiver>
+
+        <activity
+            android:name=".StatsActivity"
+            android:label="@string/title_activity_stats" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mindping.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

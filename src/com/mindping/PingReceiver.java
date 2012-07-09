@@ -1,6 +1,7 @@
 package com.mindping;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -13,6 +14,10 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.widget.Toast;
 
+import com.mindping.UserHistory.Ping;
+import com.mindping.UserHistory.Ping.PingResponse;
+import com.mindping.UserHistory.Ping.PingType;
+
 public class PingReceiver extends BroadcastReceiver {
 	final static long[] SHAVE_AND_HAIRCUT_PULSE = { 0, 150, //
 			250, 150, //
@@ -23,6 +28,8 @@ public class PingReceiver extends BroadcastReceiver {
 
 	final static long[] PING_PULSE = { 0, //
 			50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, };
+
+	private static UserHistory history;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -52,6 +59,13 @@ public class PingReceiver extends BroadcastReceiver {
 
 			Toast.makeText(context, "Are you aware? ", Toast.LENGTH_SHORT)
 					.show();
+
+			if (history == null) {
+				history = new UserHistory(context);
+			}
+			Ping ping = new UserHistory.Ping(new Date(), PingType.ONE_WAY,
+					PingResponse.NONE);
+			history.addPing(ping);
 
 			// Kick off the next ping
 			int minutes = preferences.getInt("ping_interval", 10);
