@@ -63,9 +63,8 @@ public class PingReceiver extends BroadcastReceiver {
 			if (history == null) {
 				history = new UserHistory(context);
 			}
-			Ping ping = new UserHistory.Ping(new Date(), PingType.ONE_WAY,
+			Ping ping = history.createPing(new Date(), PingType.ONE_WAY,
 					PingResponse.NONE);
-			history.addPing(ping);
 
 			// Kick off the next ping
 			int minutes = preferences.getInt("ping_interval", 10);
