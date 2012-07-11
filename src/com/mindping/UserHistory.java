@@ -29,11 +29,15 @@ public class UserHistory extends SQLiteOpenHelper {
 	 * This is a single ping by the app, either responded to or not.
 	 */
 	public static class Ping {
-		private Ping(Date date, PingType type, PingResponse response) {
-			super();
+		private Ping(Long id, Date date, PingType type, PingResponse response) {
+			this.id = id;
 			this.date = date;
 			this.type = type;
 			this.response = response;
+		}
+
+		private Ping(Date date, PingType type, PingResponse response) {
+			this(null, date, type, response);
 		}
 
 		public static enum PingType {
@@ -58,15 +62,20 @@ public class UserHistory extends SQLiteOpenHelper {
 					NONE, YES, NO);
 		}
 
-		final Date date;
+		public final Long id;
 
-		final PingType type;
+		public final Date date;
 
-		final PingResponse response;
+		public final PingType type;
+
+		public final PingResponse response;
 
 		private ContentValues contentValues() {
 			ContentValues values = new ContentValues();
 
+			if (id != null) {
+				values.put("_id", id);
+			}
 			values.put("date", iso8601Format.format(date));
 			values.put("type", PingType.databaseOrder.indexOf(type));
 			values.put("response", PingResponse.databaseOrder.indexOf(response));
@@ -79,22 +88,62 @@ public class UserHistory extends SQLiteOpenHelper {
 
 		private static Ping fromContentValues(ContentValues values)
 				throws ParseException {
+			Long id = values.getAsLong("_id");
 			Date date = iso8601Format.parse(values.getAsString("date"));
 			PingType type = PingType.databaseOrder.get(values
 					.getAsInteger("type"));
 			PingResponse response = PingResponse.databaseOrder.get(values
 					.getAsInteger("response"));
 
-			return new Ping(date, type, response);
+			return new Ping(id, date, type, response);
 		}
+	}
+
+	private Ping getPing(Long id) {
+		Cursor cursor = getReadableDatabase().query("pings",
+				new String[] { "_id", "date", "type", "response" }, "_id = ?",
+				new String[] { id.toString() }, null, null, null);
+
+		Ping ping = null;
+
+		if (cursor.getCount() >= 1) {
+			cursor.moveToFirst();
+			ContentValues values = new ContentValues();
+
+			values.put("_id", cursor.getString(0));
+			values.put("date", cursor.getString(1));
+			values.put("type", cursor.getString(2));
+			values.put("response", cursor.getString(3));
+
+			try {
+				ping = Ping.fromContentValues(values);
+			} catch (ParseException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		cursor.close();
+		return ping;
 	}
 
 	public Ping createPing(Date date, PingType type, PingResponse response) {
 		Ping ping = new Ping(date, type, response);
 
-		getWritableDatabase().insert("pings", null, ping.contentValues());
+		Long id = getWritableDatabase().insert("pings", null,
+				ping.contentValues());
 
-		return ping;
+		return getPing(id);
+	}
+
+	public int numPings() {
+		Cursor cursor = getReadableDatabase().query("pings",
+				new String[] { "count(0)" }, null, null, null, null, null);
+
+		cursor.moveToFirst();
+		int num = cursor.getInt(0);
+		cursor.close();
+
+		return num;
 	}
 
 	@Override
@@ -113,16 +162,5 @@ public class UserHistory extends SQLiteOpenHelper {
 		default:
 			throw new RuntimeException("Unknown old version of database");
 		}
-	}
-
-	public int numPings() {
-		Cursor cursor = getReadableDatabase().query("pings",
-				new String[] { "count(0)" }, null, null, null, null, null);
-
-		cursor.moveToFirst();
-		int num = cursor.getInt(0);
-		cursor.close();
-
-		return num;
 	}
 }
