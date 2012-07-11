@@ -8,6 +8,7 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -108,12 +109,9 @@ public class UserHistory extends SQLiteOpenHelper {
 
 		if (cursor.getCount() >= 1) {
 			cursor.moveToFirst();
-			ContentValues values = new ContentValues();
 
-			values.put("_id", cursor.getString(0));
-			values.put("date", cursor.getString(1));
-			values.put("type", cursor.getString(2));
-			values.put("response", cursor.getString(3));
+			ContentValues values = new ContentValues();
+			DatabaseUtils.cursorRowToContentValues(cursor, values);
 
 			try {
 				ping = Ping.fromContentValues(values);
