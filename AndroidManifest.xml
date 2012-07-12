@@ -24,9 +24,7 @@
         </activity>
         <activity android:name=".SettingsActivity" />
 
-        <receiver
-            android:name="PingReceiver"
-            android:process=":remote" >
+        <receiver android:name=".Pinger" >
         </receiver>
 
         <activity
