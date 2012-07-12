@@ -34,6 +34,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		getPreferences(this);
+
 		final ToggleButton pingButton = (ToggleButton) findViewById(R.id.ping_toggleButton);
 		pingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
