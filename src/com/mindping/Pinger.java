@@ -47,8 +47,7 @@ public class Pinger extends BroadcastReceiver {
 		try {
 			AssetFileDescriptor afd = context.getAssets().openFd(soundName);
 			MediaPlayer player = new MediaPlayer();
-			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
-					afd.getLength());
+			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 			player.prepare();
 			player.start();
 		} catch (IOException e) {
@@ -57,8 +56,7 @@ public class Pinger extends BroadcastReceiver {
 	}
 
 	private void vibrate(Context context, long[] pattern) {
-		Vibrator vibrator = (Vibrator) context
-				.getSystemService(Context.VIBRATOR_SERVICE);
+		Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 		vibrator.vibrate(pattern, -1);
 	}
 
@@ -78,16 +76,15 @@ public class Pinger extends BroadcastReceiver {
 	 *            The time at which the ping should arrive, in milliseconds.
 	 */
 	public static void sendPing(Context context, long millisTime) {
-		Log.i(TAG, "Starting pinging in " + (millisTime - new Date().getTime())
-				/ 1000.0f + " seconds");
+		Log.i(TAG, "Starting pinging in " + (millisTime - new Date().getTime()) / 1000.0f
+				+ " seconds");
 
 		SharedPreferences prefs = MainActivity.getPreferences(context);
 		Editor editor = prefs.edit();
 		editor.putBoolean("is_pinging", true);
 		editor.apply();
 
-		AlarmManager am = (AlarmManager) context
-				.getSystemService(Context.ALARM_SERVICE);
+		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.RTC_WAKEUP, millisTime, getPendingIntent(context));
 	}
 
@@ -105,8 +102,7 @@ public class Pinger extends BroadcastReceiver {
 		editor.putBoolean("is_pinging", false);
 		editor.apply();
 
-		AlarmManager am = (AlarmManager) context
-				.getSystemService(Context.ALARM_SERVICE);
+		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		am.cancel(getPendingIntent(context));
 	}
 
@@ -126,8 +122,7 @@ public class Pinger extends BroadcastReceiver {
 			}
 
 			// toast!
-			Toast.makeText(context, "Are you aware? ", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(context, "Are you aware? ", Toast.LENGTH_SHORT).show();
 
 			if (history == null) {
 				history = new UserHistory(context);

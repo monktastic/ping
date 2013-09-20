@@ -41,8 +41,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				if (pingButton.isChecked()) {
 					// start pinging
-					SharedPreferences prefs = MainActivity
-							.getPreferences(MainActivity.this);
+					SharedPreferences prefs = MainActivity.getPreferences(MainActivity.this);
 					int minutes = prefs.getInt("ping_interval", 0);
 					Calendar cal = Calendar.getInstance();
 					if (!BuildConfig.DEBUG) {
@@ -61,8 +60,7 @@ public class MainActivity extends Activity {
 		final Button statsButton = (Button) findViewById(R.id.stats_button);
 		statsButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this,
-						StatsActivity.class);
+				Intent intent = new Intent(MainActivity.this, StatsActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				MainActivity.this.startActivity(intent);
 			}
