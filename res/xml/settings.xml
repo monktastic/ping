@@ -3,15 +3,15 @@
 
     <com.hlidskialf.android.preference.SeekBarPreference
         min="1"
-        android:defaultValue="10"
-        android:key="ping_interval"
-        android:max="120"
+        android:defaultValue="4"
+        android:key="ping_interval_min"
+        android:max="60"
         android:summary="@string/settings_summary_ping_interval"
         android:text=" minutes"
         android:title="@string/settings_title_ping_interval" />
     <com.hlidskialf.android.preference.SeekBarPreference
-        android:defaultValue="7"
-        android:key="aware_checks"
+        android:defaultValue="80"
+        android:key="aware_check_percent"
         android:max="100"
         android:summary="@string/settings_summary_aware_reports"
         android:text=" percent"

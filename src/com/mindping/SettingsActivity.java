@@ -15,12 +15,12 @@ public class SettingsActivity extends PreferenceActivity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		Preference preference = findPreference(key);
-		if (key.equals("ping_interval")) {
+		if (key.equals("ping_interval_min")) {
 			int value = sharedPreferences.getInt(key, 0);
 			String summary = this.getString(
 					R.string.settings_summary_ping_interval, value);
 			preference.setSummary(summary);
-		} else if (key.equals("aware_checks")) {
+		} else if (key.equals("aware_check_percent")) {
 			int value = sharedPreferences.getInt(key, 0);
 			String summary = this.getString(
 					R.string.settings_summary_aware_reports, value);

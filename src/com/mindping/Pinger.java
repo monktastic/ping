@@ -3,6 +3,7 @@ package com.mindping;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -35,6 +36,8 @@ public class Pinger extends BroadcastReceiver {
 	final static long[] PING_PULSE = { 0, //
 			50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, };
 
+	private static Random random = new Random();
+	
 	/**
 	 * Plays the sound specified in soundName.
 	 * 
@@ -89,6 +92,36 @@ public class Pinger extends BroadcastReceiver {
 	}
 
 	/**
+	 * Sends a ping in the future, at a time dictated by the ping preferences.
+	 * 
+	 * @param context
+	 *            A valid context.
+	 */
+	public static void sendPing(Context context) {
+		int minutes = MainActivity.getPreferences(context).getInt("ping_interval_min", 3);
+		Log.i(TAG, "Next ping in " + minutes);
+		Calendar cal = Calendar.getInstance();
+		if (BuildConfig.DEBUG) {
+			// Convert to seconds if in debug mode
+			cal.add(Calendar.SECOND, minutes);
+		} else {
+			cal.add(Calendar.MINUTE, minutes);
+		}
+		sendPing(context, cal.getTimeInMillis());
+	}
+
+	/**
+	 * Sends a ping scheduled to arrive now.
+	 * 
+	 * @param context
+	 *            A valid context.
+	 */
+	public static void sendPingNow(Context context) {
+		Log.i(TAG, "Starting ping now");
+		sendPing(context, Calendar.getInstance().getTimeInMillis());
+	}
+
+	/**
 	 * Cancels all future pings.
 	 * 
 	 * @param context
@@ -107,7 +140,7 @@ public class Pinger extends BroadcastReceiver {
 	}
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(final Context context, Intent intent) {
 		try {
 			SharedPreferences prefs = MainActivity.getPreferences(context);
 
@@ -121,24 +154,22 @@ public class Pinger extends BroadcastReceiver {
 				vibrate(context, PING_PULSE);
 			}
 
-			// toast!
 			Toast.makeText(context, "Are you aware? ", Toast.LENGTH_SHORT).show();
-
+			
+			int ping_percentage = MainActivity.getPreferences(context).getInt("aware_check_percent", -1);
+			if (random.nextInt(100) < ping_percentage) {
+				Intent responseIntent = new Intent(context, ResponseActivity.class);
+				responseIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(responseIntent);
+			} else {
+				sendPing(context);
+			}
+			
 			if (history == null) {
 				history = new UserHistory(context);
 			}
 			history.createPing(new Date(), PingType.ONE_WAY, PingResponse.NONE);
 
-			// Kick off the next ping
-			int minutes = prefs.getInt("ping_interval", 10);
-			Calendar cal = Calendar.getInstance();
-			if (BuildConfig.DEBUG) {
-				// Convert to seconds if in debug mode
-				cal.add(Calendar.SECOND, minutes);
-			} else {
-				cal.add(Calendar.MINUTE, minutes);
-			}
-			sendPing(context, cal.getTimeInMillis());
 		} catch (Exception e) {
 			Toast.makeText(context, "ERRAR!: " + e, Toast.LENGTH_SHORT).show();
 			e.printStackTrace();

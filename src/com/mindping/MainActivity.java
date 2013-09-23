@@ -1,7 +1,5 @@
 package com.mindping;
 
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,36 +18,23 @@ public class MainActivity extends Activity {
 	static String SHARED_PREFS_NAME = "main_activity_prefs";
 
 	public static SharedPreferences getPreferences(Context context) {
-		// set default values in preferences
-		PreferenceManager.setDefaultValues(context, R.xml.settings, false);
-
-		SharedPreferences preferences = context.getSharedPreferences(
-				MainActivity.SHARED_PREFS_NAME, Context.MODE_MULTI_PROCESS);
-
-		return preferences;
+		return context.getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+				Context.MODE_MULTI_PROCESS);
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// set default values in preferences
+		PreferenceManager.setDefaultValues(this, R.xml.settings, true);
 		setContentView(R.layout.activity_main);
-
-		getPreferences(this);
 
 		final ToggleButton pingButton = (ToggleButton) findViewById(R.id.ping_toggleButton);
 		pingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (pingButton.isChecked()) {
+				if (pingButton.isChecked()) { 
 					// start pinging
-					SharedPreferences prefs = MainActivity.getPreferences(MainActivity.this);
-					int minutes = prefs.getInt("ping_interval", 0);
-					Calendar cal = Calendar.getInstance();
-					if (!BuildConfig.DEBUG) {
-						// In debug mode, ping now
-						cal.add(Calendar.MINUTE, minutes);
-					}
-
-					Pinger.sendPing(MainActivity.this, cal.getTimeInMillis());
+					Pinger.sendPing(MainActivity.this);
 				} else {
 					// disable future events
 					Pinger.cancelPings(MainActivity.this);

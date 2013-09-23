@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mindping"
     android:versionCode="1"
@@ -14,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.mindping.MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,17 +23,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity" />
+        <activity android:name="com.mindping.SettingsActivity" />
 
-        <receiver android:name=".Pinger" >
+        <receiver android:name="com.mindping.Pinger" >
         </receiver>
 
         <activity
-            android:name=".StatsActivity"
+            android:name="com.mindping.StatsActivity"
             android:label="@string/title_activity_stats" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mindping.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.mindping.ResponseActivity"
+            android:label="@string/title_activity_response" 
+            android:theme="@android:style/Theme.Translucent"
+            android:layout_alignParentBottom="True" >
         </activity>
     </application>
 
